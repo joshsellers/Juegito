@@ -66,6 +66,7 @@ public class Item {
     public static final int CLOTHES_FEET = 10;
     public static final int CLOTHES_HANDS = 11;
     public static final int CLOTHES_HAIR = 12;
+    public static final int PLACEABLE = 13;
     
     public static final int TYPE_NA = 0;
     public static final int TYPE_WEAPON = 1;
@@ -74,6 +75,7 @@ public class Item {
     public static final int TYPE_AMMO = 4;
     public static final int TYPE_CLOTHES = 5;
     public static final int TYPE_MATERIAL = 6;
+    public static final int TYPE_PLACEABLE = 7;
     
     protected int ID;
     protected int tileID;
