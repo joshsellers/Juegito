@@ -1,0 +1,3 @@
+on level init
+find player
+end

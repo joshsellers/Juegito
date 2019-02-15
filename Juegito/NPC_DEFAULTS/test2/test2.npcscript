@@ -1,0 +1,4 @@
+on interact
+say This test was successful;
+avoid player 5
+return to 1

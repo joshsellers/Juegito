@@ -1,0 +1,5 @@
+on level init
+find player
+say Hello;
+avoid player 2
+end

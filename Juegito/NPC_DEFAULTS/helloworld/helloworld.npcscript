@@ -1,0 +1,5 @@
+on interact
+face player
+say Hello;
+avoid player 1
+end
