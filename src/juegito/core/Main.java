@@ -308,13 +308,6 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
     public void questTest() {
         i = 0;
         if (p != null) {
-            if (showMessage("You may now pass through walls.", 104, p.noCollide && !Seshat.displaying())) {
-                i++;
-            }
-            if (showMessage("HALT!", 104, p.x == 1904 && p.y == 1936 && !p.noCollide)) {
-                p.noCollide = true;
-                i++;
-            }
             if (p.x >> Screen.SHIFT == 114 && p.y >> Screen.SHIFT == 102 && l.lID == 4) {
                 p.getQuestHandler().loadQuest((byte)9);
             }
