@@ -315,6 +315,9 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
                 p.noCollide = true;
                 i++;
             }
+            if (p.x >> Screen.SHIFT == 114 && p.y >> Screen.SHIFT == 102 && l.lID == 4) {
+                p.getQuestHandler().loadQuest((byte)9);
+            }
         }
     }
     
