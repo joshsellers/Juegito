@@ -241,6 +241,10 @@ public class Player extends Mob {
         return qh;
     }
     
+    public KeyIN getKeyIn() {
+        return this.k;
+    }
+    
     public boolean canMove() {
         return canMove;
     }

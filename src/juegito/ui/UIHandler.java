@@ -78,6 +78,8 @@ public class UIHandler implements MouseInputListener, MouseWheelListener, Action
     
     private List<UIButton> craftingButtons = new ArrayList<>();
     
+    public boolean buttonControls;
+    
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public UIHandler(Canvas c) {
         this.c = c;
@@ -178,6 +180,31 @@ public class UIHandler implements MouseInputListener, MouseWheelListener, Action
         } catch (ConcurrentModificationException ex) {
             if (source != null) {
                 source.l.getDebug().printMessage(Debug.DebugType.ERROR, "UIHandler", ex.getLocalizedMessage(), 0);
+            }
+        }
+        
+        if (source instanceof juegito.level.Player && buttonControls) {
+            juegito.level.Player p = (juegito.level.Player) source;
+            if (this.getMouseY() < Main.height / Main.SCALE / 2 - 20) {
+                p.getKeyIn().w.toggle(true);
+                p.getKeyIn().s.toggle(false);
+            } else if (this.getMouseY() > Main.height / Main.SCALE / 2 + 20) {
+                p.getKeyIn().s.toggle(true);
+                p.getKeyIn().w.toggle(false);
+            } else {
+                p.getKeyIn().s.toggle(false);
+                p.getKeyIn().w.toggle(false);
+            }
+            
+            if (this.getMouseX() < Main.width / Main.SCALE / 2 - 20) {
+                p.getKeyIn().a.toggle(true);
+                p.getKeyIn().d.toggle(false);
+            } else if (this.getMouseX() > Main.width / Main.SCALE / 2 + 20) {
+                p.getKeyIn().d.toggle(true);
+                p.getKeyIn().a.toggle(false);
+            } else {
+                p.getKeyIn().d.toggle(false);
+                p.getKeyIn().a.toggle(false);
             }
         }
     }

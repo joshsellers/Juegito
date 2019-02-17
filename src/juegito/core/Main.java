@@ -74,12 +74,18 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
     private UIButton newgb;
     private UIButton loadgb;
     private UIButton exitgb;
+    private UIButton wb;
+    private UIButton ab;
+    private UIButton sb;
+    private UIButton db;
+    
     private boolean gameStarted = false;
 
     private Player p;
     protected Level l;
 
     private boolean debugwindow = false;
+    private boolean buttonControls = false;
     private boolean chill = false;
     private int lastW = 0;
     private int lastH = 0;
@@ -284,7 +290,23 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
         ui.addComponent(fullscreenb);
         UIButton deletesaveb = new UIButton("Delete save file", "Delete save file,m", 5, 125, false, this, ui);
         ui.addComponent(deletesaveb);
+        UIButton buttoncontrolb = new UIButton("Toggle button controls", "Toggle button controls,m", 5, 145, true, this, ui);
+        buttoncontrolb.setCondition(false);
+        ui.addComponent(buttoncontrolb);
         updateButtons();
+        
+        wb = new UIButton("W", "W,bc", 100, HEIGHT / SCALE - 100, true, this, ui);
+        wb.setActive(false);
+        ui.addComponent(wb);
+        ab = new UIButton("A", "A,bc", 50, HEIGHT / SCALE - 50, true, this, ui);
+        ab.setActive(false);
+        ui.addComponent(ab);
+        sb = new UIButton("S", "S,bc", 100, HEIGHT / SCALE - 75, true, this, ui);
+        sb.setActive(false);
+        ui.addComponent(sb);
+        db = new UIButton("D", "D,bc", 125, HEIGHT / SCALE - 50, true, this, ui);
+        db.setActive(false);
+        ui.addComponent(db);
     }
 
     void updateButtons() {
@@ -893,7 +915,9 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
 
     @Override
     public void mousePressed(MouseEvent e) {
-
+        if (e.getButton() == MouseEvent.BUTTON1 && buttonControls) {
+            this.keyPressed(new KeyEvent(c, 1, 20, 1, KeyEvent.VK_E, 'e'));
+        }
     }
 
     @Override
@@ -913,6 +937,10 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
                     break;
                 }
             }
+        }
+        
+        if (e.getButton() == MouseEvent.BUTTON1 && buttonControls) {
+            this.keyReleased(new KeyEvent(c, 1, 20, 1, KeyEvent.VK_E, 'e'));
         }
     }
 
@@ -1358,6 +1386,13 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
                 loadgb.setActive(false);
                 exitgb.setActive(false);
                 startGame(false);
+                break;
+            case "Toggle button controls":
+                buttonControls = !buttonControls;
+                ui.buttonControls = buttonControls;
+                break;
+            case "W":
+                p.getKeyIn().w.toggle(!p.getKeyIn().w.isPressed());
                 break;
         }
     }
