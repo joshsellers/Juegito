@@ -25,7 +25,7 @@ import juegito.particles.Particle;
  */
 public class Item {
     
-    public static final int TOP_ID = 24;
+    public static final int TOP_ID = 25;
     
     public static final Item[] items = new Item[TOP_ID]; //ID   tileX tileY craftable  damage range weight   type
     public static final Item NULL             = new Item( 0,     0,    0,    false,  0,     0,   0,   0,   0,  0,  0,   "_",                new int[][] {{0, 0}});
@@ -52,6 +52,9 @@ public class Item {
     public static final Item ROCK             = new Item( 21,    2,    31,   false,  0,     2,   1,   2,   1,  6,  0,   "Rock",             new int[][] {{0, 0}});
     public static final Item PICKAXE          = new Item( 22,    3,    31,   true,   0,     18,  3,   8,   1,  1,  0,   "Pickaxe",          new int[][] {{21, 3}, {20, 3}});
     public static final Item BULLET_BASIC     = new Item( 23,    10,   31,  true,   128,   1,   1,   1,   2,  4,  0,    "Bullet",       new int[][] {{0, 0}});
+    
+    public static final Item CAMPFIRE         = new PlaceableItem(24, true, 0, 0, new int[] {0, 0}, new int[] {0, 0}, 12, 2, "Campfire", new int[][] {{Item.WOOD.getID(), 8}});
+    
     
     public static final int NOT_EQUIPPED = 0;
     public static final int WEAPON = 1;
