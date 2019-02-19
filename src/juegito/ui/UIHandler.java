@@ -183,12 +183,13 @@ public class UIHandler implements MouseInputListener, MouseWheelListener, Action
             }
         }
         
+        int neutralArea = 45;
         if (source instanceof juegito.level.Player && buttonControls) {
             juegito.level.Player p = (juegito.level.Player) source;
-            if (this.getMouseY() < Main.height / Main.SCALE / 2 - 20) {
+            if (this.getMouseY() < Main.height / Main.SCALE / 2 - neutralArea) {
                 p.getKeyIn().w.toggle(true);
                 p.getKeyIn().s.toggle(false);
-            } else if (this.getMouseY() > Main.height / Main.SCALE / 2 + 20) {
+            } else if (this.getMouseY() > Main.height / Main.SCALE / 2 + neutralArea) {
                 p.getKeyIn().s.toggle(true);
                 p.getKeyIn().w.toggle(false);
             } else {
@@ -196,10 +197,10 @@ public class UIHandler implements MouseInputListener, MouseWheelListener, Action
                 p.getKeyIn().w.toggle(false);
             }
             
-            if (this.getMouseX() < Main.width / Main.SCALE / 2 - 20) {
+            if (this.getMouseX() < Main.width / Main.SCALE / 2 - neutralArea) {
                 p.getKeyIn().a.toggle(true);
                 p.getKeyIn().d.toggle(false);
-            } else if (this.getMouseX() > Main.width / Main.SCALE / 2 + 20) {
+            } else if (this.getMouseX() > Main.width / Main.SCALE / 2 + neutralArea) {
                 p.getKeyIn().d.toggle(true);
                 p.getKeyIn().a.toggle(false);
             } else {

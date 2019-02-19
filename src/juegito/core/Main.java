@@ -170,6 +170,7 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
         if (l != null) l.addMob(p);
         if (ui != null) {
             ui.setSource(p);
+            ui.buttonControls = buttonControls;
         }
         
         if (ui != null) {
@@ -290,8 +291,8 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
         ui.addComponent(fullscreenb);
         UIButton deletesaveb = new UIButton("Delete save file", "Delete save file,m", 5, 125, false, this, ui);
         ui.addComponent(deletesaveb);
-        UIButton buttoncontrolb = new UIButton("Toggle button controls", "Toggle button controls,m", 5, 145, true, this, ui);
-        buttoncontrolb.setCondition(false);
+        UIButton buttoncontrolb = new UIButton("Mouse controls", "Toggle button controls,m", 5, 145, true, this, ui);
+        buttoncontrolb.setCondition(buttonControls);
         ui.addComponent(buttoncontrolb);
         updateButtons();
         
@@ -1008,6 +1009,8 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
                             debugwindow = true;
                             f.setSize(643, 399);
                         }
+                        
+                        buttonControls = ins[i + 7] == 0x01;
 
                         lastW = (int) ins[i + 4];
                         lastH = (int) ins[i + 5];
@@ -1303,12 +1306,13 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
         switch (e.getActionCommand().split(",")[0]) {
             case "Save game":
                 Save s = new Save("0", debug);
-                char[] data = new char[5];
+                char[] data = new char[6];
                 if (debug.displayDebug) data[0] = (char) 0x01;
                 if (getFullScreen()) data[1] = (char) 0x01;
                 data[2] = (char) f.getWidth();
                 data[3] = (char) f.getHeight();
                 if (debugwindow) data[4] = (char) 0x01;
+                if (buttonControls) data[5] = (char) 0x01;
                 s.writeToBuffer(Save.TYPE_OPT, (char) 0x01, data);
                 s.writeLevel(p, l);
                 s.save();
