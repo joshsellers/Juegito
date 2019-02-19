@@ -856,17 +856,26 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
                 l.showBounds = dispDebug;
             }
         }
+        
         if (ti != null && !ti.getActive()) {
             if (key == KeyEvent.VK_I) {
                 ui.dispInv = !ui.dispInv;
+                if (ui.dispCrafting) ui.dispCrafting = false;
             }
             
             if (key == KeyEvent.VK_Q) {
                 ui.dispCrafting = !ui.dispCrafting;
+                if (ui.dispInv) ui.dispInv = false;
             }
 
             if (key == KeyEvent.VK_ESCAPE) {
-                paused = !paused;
+                if (!ui.dispCrafting && !ui.dispInv) {
+                    paused = !paused;
+                } else if (ui.dispCrafting) {
+                    ui.dispCrafting = false;
+                } else if (ui.dispInv) {
+                    ui.dispInv = false;
+                }
                 updateButtons();
             }
 
