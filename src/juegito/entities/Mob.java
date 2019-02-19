@@ -462,7 +462,7 @@ public abstract class Mob extends Entity implements Comparable<Mob> {
         int slots = 10;
         int completion = 0;
         Item[] buff = new Item[slots];
-        completion = this.getInventory().stream().filter((i) -> (i.equippedAs > 2)).map((i) -> {
+        completion = this.getInventory().stream().filter((i) -> (i.equippedAs > 2 && i.equippedAs < slots)).map((i) -> {
             buff[i.equippedAs-3] = i.getItem();
             return i;
         }).map((_item) -> 1).reduce(completion, Integer::sum);
