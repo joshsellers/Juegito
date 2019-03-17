@@ -5,6 +5,7 @@ import juegito.entities.Entity;
 import juegito.entities.Mob;
 import juegito.gfx.Screen;
 import juegito.level.Level;
+import juegito.level.tiles.Tile;
 
 /**
  *
@@ -83,6 +84,10 @@ public class PlaceableItem extends Item {
         };
         
         l.addEntity(e);
+        
+        int x0 = 0;
+        int y0 = 0;
+        source.l.tiles[((source.x >> Screen.SHIFT) + x0) + ((source.y >> Screen.SHIFT) + y0) * source.l.width] = ID;
         
         source.getEquippedWeapon().take(1);
     }
