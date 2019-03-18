@@ -109,7 +109,7 @@ public abstract class Mob extends Entity implements Comparable<Mob> {
                 manaRestoreTimer = 0;
             }
         } else if (mana == baseMana) {
-            manaRestorationTime = baseMana / 10 / 7 + 2;
+            manaRestorationTime = baseMana / 6 + 2;
         }
         
         bounds.x = x;
