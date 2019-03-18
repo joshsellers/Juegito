@@ -50,18 +50,18 @@ public class PlaceableItem extends Item {
         switch (source.movingDir) {
             case 0:
                 lx = source.x;
-                ly = ((source.y >> Screen.SHIFT) - this.distance - 1) >> Screen.SHIFT;
+                ly = ((source.y >> Screen.SHIFT) - this.distance - 1) << Screen.SHIFT;
                 break;
             case 1:
                 lx = source.x;
-                ly = ((source.y >> Screen.SHIFT) + this.distance) >> Screen.SHIFT;
+                ly = ((source.y >> Screen.SHIFT) + this.distance) << Screen.SHIFT;
                 break;
             case 2:
-                lx = ((source.x >> Screen.SHIFT) - this.distance) >> Screen.SHIFT;
+                lx = ((source.x >> Screen.SHIFT) - this.distance) << Screen.SHIFT;
                 ly = source.y;
                 break;
             case 3:
-                lx = ((source.x >> Screen.SHIFT) + this.distance) >> Screen.SHIFT;
+                lx = ((source.x >> Screen.SHIFT) + this.distance) << Screen.SHIFT;
                 ly = source.y;
                 break;
         }
@@ -74,7 +74,7 @@ public class PlaceableItem extends Item {
 
             @Override
             public void render(Screen s) {
-                ref.render(s, source, 0);
+                s.render(x, y, ref.tileX + ref.tileY * (Screen.TILE_SHEET_SIZE / Screen.TILE_SIZE));
             }
 
             @Override
@@ -87,7 +87,7 @@ public class PlaceableItem extends Item {
         
         int x0 = 0;
         int y0 = 0;
-        source.l.tiles[((source.x >> Screen.SHIFT) + x0) + ((source.y >> Screen.SHIFT) + y0) * source.l.width] = ID;
+        //source.l.tiles[((source.x >> Screen.SHIFT) + x0) + ((source.y >> Screen.SHIFT) + y0) * source.l.width] = ID;
         
         source.getEquippedWeapon().take(1);
     }

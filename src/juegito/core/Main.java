@@ -57,7 +57,7 @@ import juegito.ui.talent.UITalentTree;
  */
 public class Main extends ABFrame implements KeyListener, MouseInputListener, ActionListener {
 
-    public static final String VERSION = "0.6.1";
+    public static final String VERSION = "0.6.2";
 
     public final static int width = 1360/2;
     public final static int height = 760/2;

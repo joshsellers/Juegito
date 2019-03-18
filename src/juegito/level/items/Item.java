@@ -54,7 +54,7 @@ public class Item {
     public static final Item BULLET_BASIC     = new Item( 23,    10,   31,  true,   128,   1,   1,   1,   2,  4,  0,    "Bullet",       new int[][] {{0, 0}});
     
     public static final Item CAMPFIRE         = new PlaceableItem(24, true, 0, 0, new int[] {0, 0}, new int[] {0, 0}, 12, 2, "Campfire", new int[][] {{Item.WOOD.getID(), 8}});
-    public static final Item WOOD_FLOOR       = new PlaceableItem(25, true, 64, 64, new int[] {64, 64}, new int[] {64, 64}, 8, 2, "Wooden Floor", new int[][] {{Item.WOOD.getID(), 50}});
+    public static final Item WOOD_FLOOR       = new PlaceableItem(25, true, 20, 0, new int[] {20, 0}, new int[] {0, 0}, 8, 2, "Wooden Floor", new int[][] {{Item.WOOD.getID(), 50}});
     
     public static final int NOT_EQUIPPED = 0;
     public static final int WEAPON = 1;
