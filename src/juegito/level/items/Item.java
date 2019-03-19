@@ -346,6 +346,18 @@ public class Item {
             if (Statc.intRandom(0, 2) == 0) {
                 l.addEntity(new DroppedItem(source.x, source.y, 0, Statc.intRandom(1, 2), false, l, l.getDebug(), Item.APPLE));
             }
+            if (Statc.intRandom(0, 50) == 0) {
+                source.manaIncreaseIncrement += Statc.intRandom(1, 2);
+                if (Statc.intRandom(0, 75) == 0) {
+                    source.baseMana += Statc.intRandom(1, 20);
+                    if (source instanceof Player) {
+                        debug.printPlainMessage("Your base arcana has increased", 5);
+                    }
+                }
+                if (source instanceof Player) {
+                    debug.printPlainMessage("Your arcana recharge speed has increased", 5);
+                }
+            }
 
             if (referenceTile == Tile.TREE_0_1.getID()) {
                 x--;
