@@ -69,6 +69,8 @@ public abstract class Mob extends Entity implements Comparable<Mob> {
     
     public int treeDamage;
     
+    public boolean manaFortune = false;
+    
     public Mob(int x, int y, int width, int height, int maxHP, int manaBase, int level, char saveID, String ID, Level l) {
         super(x, y, width, height, saveID, ID, l);
         

@@ -212,6 +212,23 @@ public class Item {
                 || curTile == Tile.ROCK_3.getID() || curTile == Tile.ROCK_4.getID()) {
                     source.addItem(Item.ROCK, 1);
                     l.tiles[((source.x >> Screen.SHIFT) + xOffset) + ((source.y >> Screen.SHIFT) + yOffset) * l.width] = Tile.GRASS_0.getID();
+                } else if (curTile == Tile.MANAROCK_0.getID()) {
+                    l.tiles[((source.x >> Screen.SHIFT) + xOffset) + ((source.y >> Screen.SHIFT) + yOffset) * l.width] = Tile.GRASS_0.getID();
+                    source.setBaseMana(source.getBaseMana() + 1);
+                    source.addXP(Statc.intRandom(0, 3));
+                    if (source instanceof Player) {
+                        ((Player) source).l.getDebug().printPlainMessage("You have arcana fortune", 5);
+                        ((Player) source).manaFortune = true;
+                        Timer t = new Timer();
+                        TimerTask tt = new TimerTask() {
+                            @Override
+                            public void run() {
+                                ((Player) source).manaFortune = false;
+                                ((Player) source).l.getDebug().printPlainMessage("Your arcana fortune has expired", 5);
+                            }
+                        };
+                        t.schedule(tt, Statc.intRandom(100000, 600000));
+                    }
                 }
             } else if (ID == Item.BOW_.getID()) {
                 boolean notEmpty = false;
@@ -319,6 +336,7 @@ public class Item {
         if (isSmackingTree) {
             if (source.treeDamage == 0) {
                 treeHP = Statc.intRandom(8, 18);
+                if (source.manaFortune) treeHP /= 2;
                 if (this.equals(Item.ROCK)) treeHP += 20;
             } else if (source.getTickCount() - lastSmack > 60) {
                 source.treeDamage = 0;
@@ -342,19 +360,24 @@ public class Item {
             
             int x = (source.x >> Screen.SHIFT) + xOffset;
             int y = (source.y >> Screen.SHIFT) + yOffset;
-            
+            int mod = 1;
+            if (source.manaFortune) mod = Statc.intRandom(2, 7);
             int deltaXp = Statc.intRandom(1, 5);
-            l.addEntity(new DroppedItem(source.x, source.y, 0, Statc.intRandom(1, 3), false, l, l.getDebug(), Item.WOOD));
+            l.addEntity(new DroppedItem(source.x, source.y, 0, Statc.intRandom(1, 3)* mod, false, l, l.getDebug(), Item.WOOD));
             if (Statc.intRandom(0, 2) == 0) {
-                deltaXp += 2;
-                l.addEntity(new DroppedItem(source.x, source.y, 0, Statc.intRandom(1, 2), false, l, l.getDebug(), Item.APPLE));
+                deltaXp += 2 * mod;
+                l.addEntity(new DroppedItem(source.x, source.y, 0, Statc.intRandom(1, 2)* mod, false, l, l.getDebug(), Item.APPLE));
             }
-            if (Statc.intRandom(0, 50) == 0) {
-                source.manaRestorationIncrement += Statc.intRandom(1, 2);
+            
+            if (Statc.intRandom(0, 50 / (mod+1)) == 0) {
+                source.manaRestorationIncrement += Statc.intRandom(1, 2) * mod;
+                if (source.getMana() + source.manaRestorationIncrement > source.baseMana) {
+                    source.baseMana += (source.getMana() + source.manaRestorationIncrement) - source.baseMana;
+                }
                 deltaXp += 2;
-                if (Statc.intRandom(0, 75) == 0) {
-                    source.baseMana += Statc.intRandom(1, 20);
-                    deltaXp*=2*source.getLevel();
+                if (Statc.intRandom(0, 75 / (mod+1)) == 0) {
+                    source.baseMana += Statc.intRandom(1, 20) + mod;
+                    deltaXp*=2*source.getLevel() * mod;
                     if (source instanceof Player) {
                         source.l.getDebug().printPlainMessage("Your base arcana has increased", 5);
                     }

@@ -206,6 +206,7 @@ public abstract class Tile {
     public static final Tile CLIFF_29 = new BasicTile(192, 11, 16, 0xFF483097, false, 0x00, false);
     public static final Tile CLIFF_30 = new BasicTile(193, 11, 17, 0xFF483098, false, 0x00, false);
     public static final Tile CLIFF_31 = new BasicTile(194, 11, 18, 0xFF483099, false, 0x00, false);
+    public static final Tile MANAROCK_0 = new AnimatedTile(195, new int[][] {{12, 4}, {12, 5}, {12, 6}, {12, 7}}, 0xFF48309A, 1, true, 0x00, false);
     
 
     protected int ID;
