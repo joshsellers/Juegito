@@ -30,9 +30,9 @@ public abstract class Mob extends Entity implements Comparable<Mob> {
     protected int HP;
     
     protected int manaRestorationTime;
-    protected int manaRestorationIncrement = 1;
+    public int manaRestorationIncrement = 1;
     protected int mana;
-    protected int baseMana;
+    public int baseMana;
     
     protected int actLevel;
     protected int level;

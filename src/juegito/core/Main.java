@@ -29,6 +29,8 @@ import java.util.Scanner;
 import java.util.logging.Logger;
 import javax.swing.event.MouseInputListener;
 import juegito.core.collision.BoundingBox;
+import juegito.core.net.GameClient;
+import juegito.core.net.HostServer;
 import juegito.entities.DroppedItem;
 import juegito.entities.Mob;
 import juegito.entities.NPC;
@@ -57,7 +59,7 @@ import juegito.ui.talent.UITalentTree;
  */
 public class Main extends ABFrame implements KeyListener, MouseInputListener, ActionListener {
 
-    public static final String VERSION = "0.6.2";
+    public static final String VERSION = "0.6.2.2";
 
     public final static int width = 1360/2;
     public final static int height = 760/2;
@@ -818,6 +820,21 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
             } else {
                 return 2;
             }
+        } else if (in.contains("start server")) {
+            int port = 0;
+            if (in.contains(":")) {
+                port = Integer.parseInt(in.split(":")[1]);
+            }
+            
+            try {
+                new HostServer(port, debug).start();
+                debug.printPlainMessage("Server started on port " + port, 5);
+            } catch (IOException ex) {
+                Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            }
+        } else if (in.contains("connect to host")) {
+            GameClient gc = new GameClient(in.split(":")[1], Integer.parseInt(in.split(":")[2]), debug);
+            debug.printPlainMessage("Connected to " + in.split(":")[1] + " with responce " + gc.sendPacket("connect"), 5);
         }
 
         return 1;

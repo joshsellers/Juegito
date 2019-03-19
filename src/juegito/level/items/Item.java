@@ -16,6 +16,7 @@ import juegito.entities.Mob;
 import juegito.gfx.Screen;
 import juegito.gfx.SpriteSheet;
 import juegito.level.Level;
+import juegito.level.Player;
 import juegito.level.tiles.Tile;
 import juegito.particles.Particle;
 
@@ -342,22 +343,28 @@ public class Item {
             int x = (source.x >> Screen.SHIFT) + xOffset;
             int y = (source.y >> Screen.SHIFT) + yOffset;
             
+            int deltaXp = Statc.intRandom(1, 5);
             l.addEntity(new DroppedItem(source.x, source.y, 0, Statc.intRandom(1, 3), false, l, l.getDebug(), Item.WOOD));
             if (Statc.intRandom(0, 2) == 0) {
+                deltaXp += 2;
                 l.addEntity(new DroppedItem(source.x, source.y, 0, Statc.intRandom(1, 2), false, l, l.getDebug(), Item.APPLE));
             }
             if (Statc.intRandom(0, 50) == 0) {
-                source.manaIncreaseIncrement += Statc.intRandom(1, 2);
+                source.manaRestorationIncrement += Statc.intRandom(1, 2);
+                deltaXp += 2;
                 if (Statc.intRandom(0, 75) == 0) {
                     source.baseMana += Statc.intRandom(1, 20);
+                    deltaXp*=2*source.getLevel();
                     if (source instanceof Player) {
-                        debug.printPlainMessage("Your base arcana has increased", 5);
+                        source.l.getDebug().printPlainMessage("Your base arcana has increased", 5);
                     }
                 }
                 if (source instanceof Player) {
-                    debug.printPlainMessage("Your arcana recharge speed has increased", 5);
+                    source.l.getDebug().printPlainMessage("Your arcana recharge speed has increased", 5);
                 }
+                
             }
+            source.addXP(deltaXp);
 
             if (referenceTile == Tile.TREE_0_1.getID()) {
                 x--;

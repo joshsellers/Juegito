@@ -104,7 +104,7 @@ public class UITextInput extends UIComponent implements KeyListener {
         if (active) {
             if (charssincestart == 0 && e.getKeyCode() == KeyEvent.VK_T) {
                 charssincestart++;
-            } else if (String.valueOf(e.getKeyChar()).matches("[ \\w\\#:-]")) {
+            } else if (String.valueOf(e.getKeyChar()).matches("[ \\w\\.#:-]")) {
                 input += e.getKeyChar();
             }
             
