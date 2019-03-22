@@ -142,7 +142,7 @@ public class Particle {
         return activeParticles;
     }
     
-    protected enum MovementType {
+    public enum MovementType {
         FLOAT, SINK, SPREAD
     }
 }

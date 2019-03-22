@@ -16,6 +16,7 @@ import juegito.level.Player;
 import juegito.level.items.Item;
 import juegito.level.items.StoredItem;
 import juegito.level.tiles.Tile;
+import juegito.particles.ActiveParticle;
 import juegito.particles.Particle;
 
 /**
@@ -190,10 +191,10 @@ public abstract class Mob extends Entity implements Comparable<Mob> {
     
     protected boolean colliding(int newX, int newY) {
         BoundingBox tempBounds = new BoundingBox(newX, newY, width, height);
-        return l.getMobs().stream().anyMatch((oe) -> (oe.active && oe.getBounds().intersects(tempBounds) && oe != this));
+        return l.getMobs().stream().anyMatch((oe) -> (oe.active && oe.getBounds().intersects(tempBounds) && oe != this && !(oe.ID.contains(Item.WOOD_FLOOR.getName().toLowerCase()))));
     }
     
-    public StoredItem getEquippedWeapon() {
+    public StoredItem getEquippedWeapon() { 
         for (StoredItem si : getInventory()) {
             if (si.equippedAs == Item.WEAPON) return si;
         }
@@ -290,6 +291,8 @@ public abstract class Mob extends Entity implements Comparable<Mob> {
         return weightLimit;
     }
     
+    
+    protected int sortPriority = 1;
     @Override
     public int compareTo(Mob another) {
         if (another.y > this.y) {
@@ -399,6 +402,8 @@ public abstract class Mob extends Entity implements Comparable<Mob> {
     }
     
     public void addXP(int xp) {
+        for(int i = 0; i<xp; i++)Particle.getActiveParticles().add(new ActiveParticle(x+Statc.intRandom(-10, 10), y+Statc.intRandom(-10, 10), 0, 0xBBBBBB, new Particle(12, 12, 12, 5000, Particle.MovementType.FLOAT)));
+        
         this.xp += xp;
         this.totalxp += xp;
         

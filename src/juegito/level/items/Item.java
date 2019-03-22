@@ -26,7 +26,7 @@ import juegito.particles.Particle;
  */
 public class Item {
     
-    public static final int TOP_ID = 26;
+    public static final int TOP_ID = 28;
     
     public static final Item[] items = new Item[TOP_ID]; //ID   tileX tileY craftable  damage range weight   type
     public static final Item NULL             = new Item( 0,     0,    0,    false,  0,     0,   0,   0,   0,  0,  0,   "_",                new int[][] {{0, 0}});
@@ -44,7 +44,7 @@ public class Item {
     public static final Item BREASTPLATE_IRON = new Item( 12,    1,    31,   true,   0,     0,   0,   16,  4,  2,  0,   "Iron Breastplate", new int[][] {{0, 0}});
     public static final Item GAUNTLET_IRON    = new Item( 13,    2,    31,   true,   0,     0,   0,   5,   5,  2,  0,   "Iron Gauntlets",   new int[][] {{0, 0}});
     public static final Item BOOTS_IRON       = new Item( 14,    3,    31,   true,   0,     0,   0,   6,   6,  2,  0,   "Iron Boots",       new int[][] {{0, 0}});
-    public static final Item STAFF_FLAMES     = new Item( 15,    3,    30,   true,   128,   15,  10,  5,   1,  1,  8,   "Staff of Flames",  new int[][] {{0, 0}});
+    public static final Item STAFF_FLAMES     = new Item( 15,    3,    30,   true,   128,   15,  10,  5,   1,  1,  8,   "Staff of Flames",  new int[][] {{26, 2}, {20, 5}});
     public static final Item MANABISCUIT      = new Item( 16,    9,    30,   true,   64,    0,   0,   1,   0,  3,  -2,  "Arcana Buscuit",   new int[][] {{0, 0}});
     public static final Item MANACAKE         = new Item( 17,    9,    31,   true,   64,    0,   0,   1,   0,  3,  -10, "Arcana Cake",      new int[][] {{0, 0}});
     public static final Item KUULA            = new Item( 18,    8,    32,   false,  64,    0,   0,   1,   0,  0,  0,   "Kuula" ,           new int[][] {{0, 0}});
@@ -55,7 +55,9 @@ public class Item {
     public static final Item BULLET_BASIC     = new Item( 23,    10,   31,  true,   128,   1,   1,   1,   2,  4,  0,    "Bullet",       new int[][] {{0, 0}});
     
     public static final Item CAMPFIRE         = new PlaceableItem(24, true, 0, 0, new int[] {0, 0}, new int[] {0, 0}, 12, 2, "Campfire", new int[][] {{Item.WOOD.getID(), 8}});
-    public static final Item WOOD_FLOOR       = new PlaceableItem(25, true, 20, 0, new int[] {20, 0}, new int[] {0, 0}, 8, 2, "Wooden Floor", new int[][] {{Item.WOOD.getID(), 50}});
+    public static final Item WOOD_FLOOR       = new PlaceableItem(25, true, 20, 0, new int[] {20, 0}, new int[] {1, 1}, 8, 2, "Wooden Floor", new int[][] {{Item.WOOD.getID(), 50}});
+    public static final Item FIRE_BULB        = new Item( 26,    10,   2,   false,   0,     0,   1,   1,0,  6,  0,         "Flame Bulb", new int[][] {{}});
+    public static final Item WOOD_WALL       = new PlaceableItem(27, true, 17, 0, new int[] {17, 0}, new int[] {3, 3}, 12, 4, "Wooden Wall", new int[][] {{Item.WOOD.getID(), 100}});
     
     public static final int NOT_EQUIPPED = 0;
     public static final int WEAPON = 1;
@@ -229,6 +231,13 @@ public class Item {
                         };
                         t.schedule(tt, Statc.intRandom(100000, 600000));
                     }
+                } else if (curTile == Tile.TOSTYPLANT_1.getID()) {
+                    l.overlayTiles[(source.x >> Screen.SHIFT) + xOffset + (((source.y >> Screen.SHIFT) + yOffset) - 1) * l.width] = Tile.AIR.getID();
+                    l.tiles[((source.x >> Screen.SHIFT) + xOffset) + ((source.y >> Screen.SHIFT) + yOffset) * l.width] = Tile.GRASS_3.getID();
+                    
+                    source.addItem(Item.FIRE_BULB, Statc.intRandom(1, 2));
+                    source.addXP(Statc.intRandom(5, 30));
+                    source.setMaxHP(source.getMaxHP() + Statc.intRandom(1, 5));
                 }
             } else if (ID == Item.BOW_.getID()) {
                 boolean notEmpty = false;

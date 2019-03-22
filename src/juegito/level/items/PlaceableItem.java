@@ -5,7 +5,9 @@ import juegito.entities.Entity;
 import juegito.entities.Mob;
 import juegito.gfx.Screen;
 import juegito.level.Level;
+import juegito.level.Player;
 import juegito.level.tiles.Tile;
+import juegito.ui.Seshat;
 
 /**
  *
@@ -13,18 +15,16 @@ import juegito.level.tiles.Tile;
  */
 public class PlaceableItem extends Item {
     
-    private int xa[];
-    private int ya[];
+    private int coordinates[];
+    private int size[];
     
     private int distance;
     
     public PlaceableItem(int ID, boolean isCraftable, int x, int y, int xa[], int ya[], int weight, int distance, String name, int[][] recipe) {
         super(ID, x, y, isCraftable, 256, 0, distance, weight, Item.WEAPON, Item.TYPE_PLACEABLE, 0, name, recipe);
-        if (xa.length != 2 || ya.length != 2) {
-            throw new RuntimeException("Incorrect coordinate format. Requires {x0, x1}, {y0, y1}");
-        }
-        this.xa = xa;
-        this.ya = ya;
+
+        this.coordinates = xa;
+        this.size = ya;
         this.distance = distance;
     }
     
@@ -66,24 +66,73 @@ public class PlaceableItem extends Item {
                 break;
         }
         
-        Entity e = new Entity(lx, ly, ref.xa[1] - ref.xa[0], ref.ya[1] - ref.ya[0], (char) 0xBD, ref.name + ref.ID, l) {
+        Mob e = new Mob(lx, ly, ref.size[0], ref.size[1], 350, 0, 1, (char) 0xBD, ref.name.toLowerCase() + "placeable", l) {
             @Override
             public void tick() {
-
+                bounds.width = ref.size[0] * 16;
+                bounds.height = ref.size[1] * 16;
+                bounds.x = x;
+                bounds.y = y;
+                
+                if (ref.ID == Item.WOOD_WALL.ID) {
+                    bounds.y += 16;
+                    bounds.height -= 16;
+                }
+                
+                if (ref.getID() == Item.WOOD_FLOOR.getID()) {
+                    this.sortPriority = 0;
+                }
             }
 
             @Override
             public void render(Screen s) {
-                s.render(x, y, ref.tileX + ref.tileY * (Screen.TILE_SHEET_SIZE / Screen.TILE_SIZE));
+                for (int i = ref.coordinates[1]; i < ref.coordinates[1] + ref.size[1]; i++) {
+                    for (int j = ref.coordinates[0]; j < ref.coordinates[0] + ref.size[0]; j++) {
+                        s.render(x + (j-coordinates[0]) * Screen.TILE_SIZE, y + (i-coordinates[1]) * Screen.TILE_SIZE, j + i * (Screen.TILE_SHEET_SIZE/Screen.TILE_SIZE));
+                    }
+                }
             }
 
             @Override
             public char[] getSaveInfo() {
                 return ("PLACEDITEM" + this.ID + ref.name).toCharArray();
             }
+
+            @Override
+            protected void die(Mob source) {
+                for (int[] recipe1 : ref.getRecipe()) {
+                    source.addItem(Item.getItem(recipe1[0]), recipe1[1]);
+                }
+            }
+
+            @Override
+            protected void attackResponse(Mob source) {
+
+            }
+
+            @Override
+            public void interact() {
+                Seshat.display(ref.getName() + " Level " + this.getLevel() + " " + this.getHP() + " HP", 12);
+            }
+
+            @Override
+            public void levelInitializationNotification() {
+
+            }
+            
+            @Override
+            public int compareTo(Mob another) {
+                int ya = another.y;
+                if (another instanceof Player) ya -= Screen.TILE_SIZE;
+                if (ref.ID == Item.WOOD_FLOOR.ID || ya > this.y) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
         };
         
-        l.addEntity(e);
+        l.addMob(e);
         
         int x0 = 0;
         int y0 = 0;
@@ -92,12 +141,12 @@ public class PlaceableItem extends Item {
         source.getEquippedWeapon().take(1);
     }
     
-    public int[] getXa() {
-        return xa;
+    public int[] getSheetCoordinates() {
+        return coordinates;
     }
     
-    public int[] getYa() {
-        return ya;
+    public int[] getSize() {
+        return size;
     }
     
 }

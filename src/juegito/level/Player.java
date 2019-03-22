@@ -3,6 +3,7 @@ package juegito.level;
 import com.amp.AmpIO.hard.KeyIN;
 import juegito.entities.Mob;
 import juegito.gfx.Screen;
+import juegito.level.items.Item;
 import juegito.level.tiles.Tile;
 import juegito.quest.QuestHandler;
 
@@ -81,7 +82,7 @@ public class Player extends Mob {
                 if (gx >= l.width << Screen.SHIFT) gx = x;
             } 
             
-            if (k.shift.isPressed()) speed = 4;
+            if (k.shift.isPressed()) speed = 2;
             else speed = 1;
             
             if ((gx >> Screen.SHIFT) << Screen.SHIFT != gx || (gy >> Screen.SHIFT) << Screen.SHIFT != gy) {
@@ -260,5 +261,14 @@ public class Player extends Mob {
     @Override
     public void levelInitializationNotification() {
         beenNotified = true;
+    }
+    
+    @Override
+    public int compareTo(Mob another) {
+        if (another.y > this.y - 16 && !another.getID().toLowerCase().contains(Item.WOOD_FLOOR.getName().toLowerCase())) {
+            return -1;
+        } else {
+            return 1;
+        }
     }
 }

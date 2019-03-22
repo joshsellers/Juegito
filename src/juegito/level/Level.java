@@ -173,7 +173,7 @@ public class Level {
     
     public boolean interact(int x, int y) {
         for (Mob m : getMobs()) {
-            if (m instanceof NPC) {
+            if (m instanceof NPC || m.getID().contains("placeable")) {
                 if (m.x >> Screen.SHIFT == x && m.y >> Screen.SHIFT == y) {
                     m.interact();
                     return true;
