@@ -231,9 +231,9 @@ public class Item {
                         };
                         t.schedule(tt, Statc.intRandom(100000, 600000));
                     }
-                } else if (curTile == Tile.TOSTYPLANT_1.getID()) {
+                } else if (curTile == Tile.TOSTYPLANT_1.getID() && l.getTile((source.x >> Screen.SHIFT) + xOffset, (((source.y >> Screen.SHIFT) + yOffset - 1)), true).getID() == Tile.TOSTYPLANT_0.getID()) {
                     l.overlayTiles[(source.x >> Screen.SHIFT) + xOffset + (((source.y >> Screen.SHIFT) + yOffset) - 1) * l.width] = Tile.AIR.getID();
-                    l.tiles[((source.x >> Screen.SHIFT) + xOffset) + ((source.y >> Screen.SHIFT) + yOffset) * l.width] = Tile.GRASS_3.getID();
+                    //l.tiles[((source.x >> Screen.SHIFT) + xOffset) + ((source.y >> Screen.SHIFT) + yOffset) * l.width] = Tile.GRASS_3.getID();
                     
                     source.addItem(Item.FIRE_BULB, Statc.intRandom(1, 2));
                     source.addXP(Statc.intRandom(5, 30));
@@ -381,7 +381,7 @@ public class Item {
             if (Statc.intRandom(0, 50 / (mod+1)) == 0) {
                 source.manaRestorationIncrement += Statc.intRandom(1, 2) * mod;
                 if (source.getMana() + source.manaRestorationIncrement > source.baseMana) {
-                    source.baseMana += (source.getMana() + source.manaRestorationIncrement) - source.baseMana;
+                    source.baseMana += (source.getMana() + source.manaRestorationIncrement);
                 }
                 deltaXp += 2;
                 if (Statc.intRandom(0, 75 / (mod+1)) == 0) {

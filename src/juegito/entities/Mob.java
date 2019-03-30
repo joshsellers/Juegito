@@ -3,10 +3,13 @@ package juegito.entities;
 import com.amp.audio.WAVSound;
 import com.amp.mathem.Statc;
 import com.amp.pre.Debug;
+import java.awt.Color;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Logger;
 import juegito.core.InventoryListener;
 import juegito.core.collision.BoundingBox;
@@ -402,7 +405,19 @@ public abstract class Mob extends Entity implements Comparable<Mob> {
     }
     
     public void addXP(int xp) {
-        for(int i = 0; i<xp; i++)Particle.getActiveParticles().add(new ActiveParticle(x+Statc.intRandom(-10, 10), y+Statc.intRandom(-10, 10), 0, 0xBBBBBB, new Particle(12, 12, 12, 5000, Particle.MovementType.FLOAT)));
+        Timer t = new Timer();
+        for(int i = 0; i<xp; i++) {
+            t.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Particle.getActiveParticles().add(
+                            new ActiveParticle(x+Statc.intRandom(-10, 10), 
+                            y+Statc.intRandom(-10, 10), 0, 
+                            new Color(Statc.intRandom(0, 5), Statc.intRandom(100, 220), Statc.intRandom(0, 90)).getRGB(), 
+                            new Particle(12, 4, 5, Statc.intRandom(10, 90), Particle.MovementType.FLOAT)));
+                }
+            }, Statc.intRandom(100, 500));
+        }
         
         this.xp += xp;
         this.totalxp += xp;
