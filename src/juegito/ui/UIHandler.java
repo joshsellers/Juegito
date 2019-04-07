@@ -303,7 +303,7 @@ public class UIHandler implements MouseInputListener, MouseWheelListener, Action
         }
         
         for (int i = 0; i < notifications.length; i++) {
-            if (notifications[i] != null && !source.leveledUp()) {
+            if (source != null && notifications[i] != null && !source.leveledUp()) {
                 Notification n = notifications[i];
                 g.setColor(Color.white);
                 g.setFont(g.getFont().deriveFont(12));

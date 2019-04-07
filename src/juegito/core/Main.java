@@ -7,6 +7,7 @@ import com.amp.pre.Debug;
 import com.amp.pre.ABFrame;
 import com.amp.text.Text;
 import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
@@ -38,6 +39,8 @@ import juegito.entities.Stalker;
 import juegito.gfx.Screen;
 import juegito.gfx.SpriteSheet;
 import juegito.level.Dungeon;
+import juegito.level.DungeonGenerator;
+import juegito.level.DungeonGeneratorLoader;
 import juegito.level.Level;
 import juegito.level.Messages;
 import juegito.level.Player;
@@ -57,9 +60,9 @@ import juegito.ui.talent.UITalentTree;
  *
  * @author joshsellers
  */
-public class Main extends ABFrame implements KeyListener, MouseInputListener, ActionListener {
+public class Main extends ABFrame implements KeyListener, MouseInputListener, ActionListener, DungeonGeneratorLoader {
 
-    public static final String VERSION = "0.6.4.5";
+    public static final String VERSION = "0.6.5";
 
     public final static int width = 1360/2;
     public final static int height = 760/2;
@@ -95,6 +98,8 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
     private boolean paused = false;
     
     private QuestHandler qh;
+    
+    private DungeonGenerator dg;
 
     public static void main(String[] args) {
         if (args.length > 0 && args[0].equals("getversion")) {
@@ -189,7 +194,7 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
         ti = new UITextInput(c, f);
         ti.setActive(false);
         if (ui != null) ui.addComponent(ti);
-
+        
         screen = new Screen(width / SCALE, height / SCALE, new SpriteSheet(debug));
         
         gameStarted = true;
@@ -384,7 +389,7 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
                     p.setGY(p.y);
                     System.gc();
                 } else if (oldid == 5 || oldid == 7) {
-                    l = Dungeon.generateDungeon();
+                    //l = Dungeon.generateDungeon();
                     l.showBounds = dispDebug;
                     l.addMob(p);
                     p.l = l;
@@ -494,10 +499,43 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
             x += 10;
             gs.drawString(String.valueOf("FREE MEM: " + (Runtime.getRuntime().freeMemory() / 1000000) + " MB"), 1, x);
         }
+        
+        if (dg != null && dg.isGenerating()) {
+            if (indx % 30 == 0) {
+                switch (ps) {
+                    case "Generating dungeon...":
+                        ps = "Generating dungeon....";
+                        break;
+                    case "Generating dungeon.":
+                        ps = "Generating dungeon..";
+                        break;
+                    case "Generating dungeon..":
+                        ps = "Generating dungeon...";
+                        break;
+                    case "Generating dungeon....":
+                        ps = "Generating dungeon.";
+                        break;
+                }
+            }
+            indx++;
+            gs.setColor(Color.blue.darker().darker().darker().darker());
+            gs.fillRect(image.getWidth() / 2 - 130 / 2, image.getHeight() / 2 - 28, 130, 35);
+            FontMetrics fm = gs.getFontMetrics();
+            int w = fm.stringWidth(ps);
+            gs.setColor(Color.cyan);
+            gs.drawString(ps, image.getWidth() / 2 - w / 2, image.getHeight() / 2 - 15);
+            gs.setColor(Color.blue.darker().darker());
+            gs.fillRect(image.getWidth() / 2 - 52, image.getHeight() / 2 - 12, 102, 10);
+            gs.setColor(new Color(0x009AFF));
+            gs.fillRect(image.getWidth() / 2- 50, image.getHeight() / 2 - 10, dg.getProgress()-1, 6);
+        }
 
         g.drawImage(image, 0, 0, f.getWidth(), f.getHeight(), f);
         ui.renderText(g);
     }
+    
+    private int indx = 0;
+    private String ps = "Generating dungeon....";
     
     public int[] loadLevelData(int LID) {
         try {
@@ -835,6 +873,17 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
         } else if (in.contains("connect to host")) {
             GameClient gc = new GameClient(in.split(":")[1], Integer.parseInt(in.split(":")[2]), debug);
             debug.printPlainMessage("Connected to " + in.split(":")[1] + " with responce " + gc.sendPacket("connect"), 5);
+        } else if (in.contains("generate dungeon")) {
+            dg = new DungeonGenerator();
+            if (!in.contains(":")) {
+                dg.init();
+                dg.setDungeonGeneratorLoader(this);
+                debug.printMessage(Debug.DebugType.INFO, "MAIN", "Dungeon generated successfully", 5);
+            } else {
+                int[] size = {Integer.parseInt(in.split(":")[1]), Integer.parseInt(in.split(":")[2])};
+                dg.init(size[0], size[1]);
+            }
+            return 0;
         }
 
         return 1;
@@ -1471,5 +1520,11 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
     
     public boolean isPaused() {
         return paused;
+    }
+
+    @Override
+    public void loadDungeon(Dungeon d) {
+        this.l = d;
+        this.qh.l = d;
     }
 }
