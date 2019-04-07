@@ -303,19 +303,13 @@ public class UIHandler implements MouseInputListener, MouseWheelListener, Action
         }
         
         for (int i = 0; i < notifications.length; i++) {
-            if (notifications[i] != null) {
+            if (notifications[i] != null && !source.leveledUp()) {
                 Notification n = notifications[i];
                 g.setColor(Color.white);
+                g.setFont(g.getFont().deriveFont(12));
                 if (n.active) g.drawString(n.message, 5, 30 + (12 * i));
             }
         }
-
-//        if (invSource != null && invSource.equipped != Item.NULL && !dispInv) {
-//            g.drawImage(invSource.equipped.getIcon(), mouseBounds.x - 8, mouseBounds.y - 8, null);
-//        } else {
-//            g.drawImage(cursor, mouseBounds.x, mouseBounds.y, null);
-//        }
-       // g.drawImage(cursor, mouseBounds.x, mouseBounds.y, null);
     }
     
     public void renderText(Graphics g) {
