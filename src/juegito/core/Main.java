@@ -62,7 +62,7 @@ import juegito.ui.talent.UITalentTree;
  */
 public class Main extends ABFrame implements KeyListener, MouseInputListener, ActionListener, DungeonGeneratorLoader {
 
-    public static final String VERSION = "0.6.5";
+    public static final String VERSION = "0.6.5.1";
 
     public final static int width = 1360/2;
     public final static int height = 760/2;
@@ -875,6 +875,7 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
             debug.printPlainMessage("Connected to " + in.split(":")[1] + " with responce " + gc.sendPacket("connect"), 5);
         } else if (in.contains("generate dungeon")) {
             dg = new DungeonGenerator();
+            dg.setPlayer(p);
             if (!in.contains(":")) {
                 dg.init();
                 dg.setDungeonGeneratorLoader(this);

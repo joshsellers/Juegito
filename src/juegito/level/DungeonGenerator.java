@@ -46,10 +46,10 @@ public class DungeonGenerator implements Runnable {
             p.y = (h / 2) << juegito.gfx.Screen.SHIFT;
             p.setGX(p.x);
             p.setGY(p.y);
-            d.addMob(p);
+            p.l.addMob(p);
         }
         if (dgl != null) {
-            dgl.loadDungeon(d);
+            dgl.loadDungeon((Dungeon) p.l);
         }
     }
     
@@ -102,7 +102,44 @@ public class DungeonGenerator implements Runnable {
                // rooms.remove(indx);
             }
         }
+        
         Graphics g = buffer.getGraphics();
+        g.setColor(Color.WHITE);
+        int cnt = 0;
+        for (Rectangle r : rooms) {
+            Rectangle lastClosest = null;
+            float pcnt = ((float) cnt / (float) rooms.size()) * 100f;
+            progress = (int) pcnt;
+            System.out.println("CONNECTING ROOMS... " + pcnt + "%");
+            for (Rectangle other : rooms) {
+                if (lastClosest == null) lastClosest = other;
+                if (!other.equals(r)) {
+                    double dist = Math.sqrt((Math.pow(r.x - other.x, 2)) + (Math.pow(r.y - other.y, 2)));
+                    double oldDist = Math.sqrt((Math.pow(r.x - lastClosest.x, 2)) + (Math.pow(r.y - other.y, 2)));
+                    if (dist < oldDist) lastClosest = other;
+                }
+            }
+            
+            if (Math.abs(r.x - lastClosest.x) > Math.abs(r.y - lastClosest.y)) {
+                if (lastClosest.x + lastClosest.width < r.x) {
+                    g.drawLine(r.x, r.y + (r.height / 2), lastClosest.x + lastClosest.width, lastClosest.y + (lastClosest.height / 2));
+                } else if (lastClosest.x > r.x + r.width) {
+                    g.drawLine(r.x + r.width, r.y + (r.height / 2), lastClosest.x, lastClosest.y + (lastClosest.height / 2));
+                }
+            }
+
+            if (Math.abs(r.y - lastClosest.y) > Math.abs(r.x - lastClosest.x)) {
+                if (lastClosest.y + lastClosest.height < r.y) {
+                    g.drawLine(r.x + (r.width / 2), r.y, lastClosest.x + (lastClosest.width / 2), lastClosest.y + lastClosest.height);
+                } else if (r.y + r.height < lastClosest.y) {
+                    g.drawLine(r.x + (r.width / 2), r.y + r.height, lastClosest.x + (lastClosest.width / 2), lastClosest.y);
+                }
+            }
+            
+            cnt++;
+        }
+        
+        
         int i = 0;
         for (Rectangle r : rooms) {
             float pcnt = ((float) i / (float) rooms.size()) * 100f;
