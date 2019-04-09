@@ -1,6 +1,7 @@
 package juegito.level;
 
 import com.amp.pre.Debug;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import juegito.entities.Entity;
@@ -38,6 +39,12 @@ public class Level {
     private char newID = 0x00;
     
     public boolean showBounds = false;
+    
+    protected boolean dungeon = false;
+    
+    public boolean isDungeon() {
+        return dungeon;
+    }
     
     public Level(char lID, int[] data, int[] overlayData, char[] events, char[] warps, char[] spawnPoints, int width, int height, Debug d) {
         tiles = data;
@@ -208,9 +215,21 @@ public class Level {
 
         screen.setOffset(xOffset, yOffset);
 
+        Player p = null;
+        if (this instanceof Dungeon) {
+            for (Mob m : getMobs()) {
+                if (m instanceof Player) {
+                    p = (Player) m;
+                    break;
+                }
+            }
+        }
+        DungeonGenerator.Room room = null;
+        if (p != null) room = p.getCurrentRoom();
         for (int y = (yOffset >> Screen.SHIFT); y < (yOffset + screen.height >> Screen.SHIFT) + 1; y++) {
             for (int x = (xOffset >> Screen.SHIFT); x < (xOffset + screen.width >> Screen.SHIFT) + 1; x++) {
-                getTile(x, y, false).render(screen, this, x << Screen.SHIFT, y << Screen.SHIFT, 0x000000);
+                if ((room != null && room.contains(new Point(x, y))) || !this.isDungeon()) getTile(x, y, false).render(screen, this, x << Screen.SHIFT, y << Screen.SHIFT, 0x000000);
+                else Tile.VOID.render(screen, this, x << Screen.SHIFT, y << Screen.SHIFT, 0x000000);
             }
         }
     }

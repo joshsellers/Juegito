@@ -19,12 +19,24 @@ import juegito.level.tiles.Tile;
  * @author joshsellers
  */
 public class Dungeon extends Level {
+    
+    private List<DungeonGenerator.Room> rooms;
 
     public Dungeon(int[] data, char[] events, char[] warps, char[] spawnPoints, int width, int height, Debug d) {
         super((char)0, data, new int[data.length], events, warps, spawnPoints, width, height, d);
         int[] air = new int[data.length];
         for (int i = 0; i < air.length; i++) air[i] = Tile.AIR.getID();
         this.overlayTiles = air;
+        
+        this.dungeon = true;
+    }
+    
+    public void setRooms(List<DungeonGenerator.Room> rooms) {
+        this.rooms = rooms;
+    }
+    
+    public List<DungeonGenerator.Room> getRooms() {
+        return this.rooms;
     }
     
     

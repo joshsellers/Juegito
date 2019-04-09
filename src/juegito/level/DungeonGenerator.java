@@ -146,20 +146,37 @@ public class DungeonGenerator implements Runnable {
                 int ry = r.y + (r.height / 2);
                 int lx = lastClosest.x + (lastClosest.width / 2);
                 int ly = lastClosest.y + (lastClosest.height / 2);
+                
+                int dir = Statc.intRandom(0, 1);
+                if (dir == 0) {
+                    r.addWarpPoint(new int[] {lx + Statc.intRandom(-lastClosest.width / 2, lastClosest.width / 2), ly + (lastClosest.height / 2) - 1, rx + Statc.intRandom(-r.width / 2, r.width / 2), ry + (r.height / 2) + 1}, lastClosest);
+                    //lastClosest.addWarpPoint(new int[] {rx + Statc.intRandom(-r.width / 2, r.width / 2), r.y - (r.height / 2), lx + Statc.intRandom(-lastClosest.width / 2, lastClosest.width / 2), ly + lastClosest.height / 2}, r);
+                } else if (dir == 1) {
+                    r.addWarpPoint(new int[] {lx + Statc.intRandom(-lastClosest.width / 2, lastClosest.width / 2), ly - (lastClosest.height / 2), rx + Statc.intRandom(-r.width / 2, r.width / 2), ry + (r.height / 2)}, lastClosest);
+                    //lastClosest.addWarpPoint(new int[] {rx + Statc.intRandom(-r.width / 2, r.width / 2), r.y + (r.height / 2), lastClosest.x + Statc.intRandom(-lastClosest.width / 2, lastClosest.width / 2), ly - (lastClosest.height / 2)}, r);
+                }
 
                 if (Math.abs(rx - lx) > Math.abs(ry - ly)) {
                     if (lx + lastClosest.width / 2 < rx) {
                         drawLine(rx - (r.width / 2), ry, lx + (lastClosest.width / 2), ly, buffer, Color.WHITE, rooms, r, lastClosest);
+                        //r.addWarpPoint(new int[] {(lx + (lastClosest.width / 2)) - 1, ly, (rx - (r.width / 2)) + 1, ry}, lastClosest);
+                        //lastClosest.addWarpPoint(new int[] {(rx - (r.width / 2)) + 1, ry, (lx + (lastClosest.width / 2)) - 1, ly}, r);
                     } else if (lx > rx + (r.width / 2)) {
                         drawLine(rx + (r.width / 2), ry, lx - (lastClosest.width / 2), ly, buffer, Color.WHITE, rooms, r, lastClosest);
+                        //r.addWarpPoint(new int[] {(lx - (lastClosest.width / 2)) + 1, ly, (rx + (r.width / 2)) - 1, ry}, lastClosest);
+                        //lastClosest.addWarpPoint(new int[] {(rx + (r.width / 2)) - 1, ry, (lx - (lastClosest.width / 2)) + 1, ly}, r);
                     }
                 }
 
                 if (Math.abs(ry - ly) > Math.abs(rx - lx)) {
                     if (lastClosest.y + lastClosest.height < r.y) {
                         drawLine(r.x + (r.width / 2), r.y, lastClosest.x + (lastClosest.width / 2), lastClosest.y + lastClosest.height, buffer, Color.WHITE, rooms, r, lastClosest);
+                        //r.addWarpPoint(new int[] {(lastClosest.x + (lastClosest.width / 2)) - 1, lastClosest.y + lastClosest.height - 1, (r.x + (r.width / 2)), r.y}, lastClosest);
+                        //lastClosest.addWarpPoint(new int[] {(r.x + (r.width / 2)), r.y, lastClosest.x + (lastClosest.width / 2) - 1, lastClosest.y + lastClosest.height - 1}, r);
                     } else if (r.y + r.height < lastClosest.y) {
                         drawLine(r.x + (r.width / 2), r.y + r.height, lastClosest.x + (lastClosest.width / 2), lastClosest.y, buffer, Color.WHITE, rooms, r, lastClosest);
+                        //r.addWarpPoint(new int[] {lastClosest.x + (lastClosest.width / 2), lastClosest.y, r.x + (r.width / 2), r.y + r.height - 1}, lastClosest);
+                        //lastClosest.addWarpPoint(new int[] {r.x + (r.width / 2), r.y + r.height - 1, lastClosest.x + (lastClosest.width / 2), lastClosest.y}, r);
                     }
                 }
 
@@ -168,13 +185,26 @@ public class DungeonGenerator implements Runnable {
 
         }
         
+        int smprgs = 0;
+        for (Room r : rooms) {
+            float pcnt = ((float) smprgs / (float) rooms.size()) * 100f;
+            progress = (int) pcnt;
+            System.out.println("MARKING SPAWN POINTS... " + pcnt + "%");
+            r.getWarpPoints().forEach((pnts) -> {
+                //data[pnts[0] + pnts[1] * w] = Tile.PORTAL_0.getID();
+                data[pnts[2] + pnts[3] * w] = Tile.DOOR_0_1.getID();
+                data[pnts[2] + (pnts[3] - 1) * w] = Tile.DOOR_0_0.getID();
+            });
+            smprgs++;
+        }
+        
         
         int i = 0;
         for (Room r : rooms) {
             float pcnt = ((float) i / (float) rooms.size()) * 100f;
-            System.out.println("DRWAWING ROOMS... " + pcnt + "%");
+            System.out.println("DRAWING ROOMS... " + pcnt + "%");
             g.setColor(Color.WHITE);
-            g.drawRect(r.x, r.y, r.width, r.height);
+            g.fillRect(r.x, r.y, r.width, r.height);
             i++;
             progress = (int) pcnt;
         }
@@ -185,7 +215,7 @@ public class DungeonGenerator implements Runnable {
                     float pcnt = ((float) (x + y * w) / (float) (w * h)) * 100f;
                     System.out.println("CONVERTING IMAGE... " + pcnt + "%");
                     progress = (int) pcnt;
-                    data[x + y * w] = Tile.GRASS_4.getID();
+                    if (data[x + y * w] == Tile.VOID.getID()) data[x + y * w] = Tile.GRASS_4.getID();
                 }
             }
         }
@@ -193,7 +223,10 @@ public class DungeonGenerator implements Runnable {
         saveDungeonData(data, w, h);
         generating = false;
         
-        return new Dungeon(data, events, warps, spawnPoints, w, h, null);
+        Dungeon dg = new Dungeon(data, events, warps, spawnPoints, w, h, null);
+        dg.setRooms(rooms);
+        
+        return dg;
     }
     
     @SuppressWarnings("ImplicitArrayToString")
@@ -237,8 +270,57 @@ public class DungeonGenerator implements Runnable {
         public String hashChain = "_";
         public int connections = 0;
         
+        private List<int[]> warpPoints = new ArrayList<>();
+        
         public Room(int x, int y, int w, int h) {
             super(x, y, w, h);
+        }
+        
+        public synchronized int[] getWarpPoint(int[] to) {
+            if (to.length != 2) throw new RuntimeException("Invalid dimensions");
+            for (int[] crds : getWarpPoints()) {
+                if (crds[0] == to[0] && crds[1] == to[1]) {
+                    return new int[] {crds[2], crds[3]};
+                }
+            }
+            
+            return null;
+        }
+        
+        public synchronized int[] getSpawnPoint(int[] from) {
+            if (from.length != 2) throw new RuntimeException("Invalid dimensions");
+            for (int[] crds : getWarpPoints()) {
+                if (crds[2] == from[0] && crds[3] == from[1]) {
+                    return new int[] {crds[0], crds[1]};
+                }
+            }
+            
+            return null;
+        }
+        
+        public synchronized List<int[]> getWarpPoints() {
+            return this.warpPoints;
+        }
+        
+        public synchronized void addWarpPoint(int[] warpPoint, Room other) {
+            if (other != this) {
+                while (warpPoint[0] <= other.x) warpPoint[0]++;
+                while (warpPoint[0] >= other.x + other.width) warpPoint[0]--;
+                while (warpPoint[1] <= other.y) warpPoint[1]++;
+                while (warpPoint[1] >= other.y + other.height) warpPoint[1]--;
+            
+                while (warpPoint[2] <= this.x) warpPoint[2]++;
+                while (warpPoint[2] >= this.x + this.width) warpPoint[2]--;
+                while (warpPoint[3] <= this.y) warpPoint[3]++;
+                while (warpPoint[3] >= this.y + this.height) warpPoint[3]--;
+            
+                while (warpPoint[0] == warpPoint[2]) warpPoint[0]++;
+                while (warpPoint[1] == warpPoint[3]) warpPoint[1]++;
+            
+                other.addWarpPoint(new int[] {warpPoint[2], warpPoint[3], warpPoint[0], warpPoint[1]}, other);
+            }
+            
+            this.getWarpPoints().add(warpPoint);
         }
     }
     

@@ -883,6 +883,7 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
             } else {
                 int[] size = {Integer.parseInt(in.split(":")[1]), Integer.parseInt(in.split(":")[2])};
                 dg.init(size[0], size[1]);
+                dg.setDungeonGeneratorLoader(this);
             }
             return 0;
         }

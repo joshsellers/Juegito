@@ -4,6 +4,7 @@ import com.amp.audio.WAVSound;
 import com.amp.mathem.Statc;
 import com.amp.pre.Debug;
 import java.awt.Color;
+import java.awt.Point;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,6 +15,8 @@ import java.util.logging.Logger;
 import juegito.core.InventoryListener;
 import juegito.core.collision.BoundingBox;
 import juegito.gfx.Screen;
+import juegito.level.Dungeon;
+import juegito.level.DungeonGenerator;
 import juegito.level.Level;
 import juegito.level.Player;
 import juegito.level.items.Item;
@@ -110,7 +113,7 @@ public abstract class Mob extends Entity implements Comparable<Mob> {
         
         if (mana < baseMana) {
             manaRestoreTimer++;
-            if (manaRestoreTimer == manaRestorationTime) {
+            if (manaRestoreTimer <= manaRestorationTime) {
                 mana += manaRestorationIncrement;
                 manaRestoreTimer = 0;
             }
@@ -123,6 +126,28 @@ public abstract class Mob extends Entity implements Comparable<Mob> {
         
         handleInventory();
         tick();
+        
+        if (l != null && this instanceof Player && l instanceof Dungeon) {
+            Dungeon dn = (Dungeon) l;
+            Player p = (Player) this;
+            for (juegito.level.DungeonGenerator.Room r : dn.getRooms()) {
+                if (r.contains(new Point(x >> Screen.SHIFT, y >> Screen.SHIFT)) && p.getKeyIn().e.isPressed()) {
+                    if (r.getSpawnPoint(new int[] {x >> Screen.SHIFT, y >> Screen.SHIFT}) != null) {
+                        int[] newPnts = r.getSpawnPoint(new int[] {x >> Screen.SHIFT, y >> Screen.SHIFT});
+                        int rand = Statc.intRandom(-1, 1);
+                        while (rand == 0) rand = Statc.intRandom(-1, 1);
+                        x = (newPnts[0] + rand) << Screen.SHIFT;
+                        y = (newPnts[1] << Screen.SHIFT);
+                        this.setGX(x);
+                        this.setGY(y);
+                        gy = y;
+                        gy = y;
+                        System.out.println("Entered room #" + this.getCurrentRoom().hashCode());
+                    }
+                }
+            }
+        }
+        
         tickCount++;
         
         renderTimer++;
@@ -292,6 +317,21 @@ public abstract class Mob extends Entity implements Comparable<Mob> {
     
     public int getWeightLimit() {
         return weightLimit;
+    }
+    
+    public DungeonGenerator.Room getCurrentRoom() {
+        DungeonGenerator.Room r = null;
+        if (l instanceof Dungeon) {
+            Dungeon dg = (Dungeon) l;
+            for (DungeonGenerator.Room rm : dg.getRooms()) {
+                if (rm.contains(new Point(x >> Screen.SHIFT, y >> Screen.SHIFT))) {
+                    r = rm;
+                    break;
+                }
+            }
+        }
+        
+        return r;
     }
     
     
