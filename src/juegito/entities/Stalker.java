@@ -187,7 +187,7 @@ public class Stalker extends Enemy {
     @Override
     protected void die(Mob source) {
         if (source != null) {
-            source.addXP(getTotalXP() / 3);
+            source.addXP(getTotalXP());
             Particle.emitValue(source.x, source.y, getTotalXP() / 3, 0x00EFA5);
         }
     }

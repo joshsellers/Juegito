@@ -131,7 +131,7 @@ public abstract class Mob extends Entity implements Comparable<Mob> {
             Dungeon dn = (Dungeon) l;
             Player p = (Player) this;
             for (juegito.level.DungeonGenerator.Room r : dn.getRooms()) {
-                if (r.contains(new Point(x >> Screen.SHIFT, y >> Screen.SHIFT)) && p.getKeyIn().e.isPressed()) {
+                if (r.contains(new Point(x >> Screen.SHIFT, y >> Screen.SHIFT)) && p.getKeyIn().e.isPressed() && this.getCurrentRoom() != null) {
                     if (r.getSpawnPoint(new int[] {x >> Screen.SHIFT, y >> Screen.SHIFT}) != null) {
                         int[] newPnts = r.getSpawnPoint(new int[] {x >> Screen.SHIFT, y >> Screen.SHIFT});
                         int rand = Statc.intRandom(-1, 1);
@@ -142,6 +142,8 @@ public abstract class Mob extends Entity implements Comparable<Mob> {
                         this.setGY(y);
                         gy = y;
                         gy = y;
+                        this.getCurrentRoom().setLevel(this.getLevel());
+                        dn.spawnLoot(this.getCurrentRoom());
                         System.out.println("Entered room #" + this.getCurrentRoom().hashCode());
                     }
                 }

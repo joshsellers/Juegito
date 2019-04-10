@@ -209,6 +209,32 @@ public abstract class Tile {
     public static final Tile MANAROCK_0 = new AnimatedTile(195, new int[][] {{12, 4}, {12, 5}, {12, 6}, {12, 7}}, 0xFF48309A, 100, true, 0x00, false);
     public static final Tile TOSTYPLANT_0 = new AnimatedTile(196, new int[][] {{11, 2}}, 0xFF48309B, 1, false, 0x00, true);
     public static final Tile TOSTYPLANT_1 = new AnimatedTile(197, new int[][] {{11, 3}}, 0xFF48309C, 1, false, 0x00, false);
+    public static final Tile DUNGEONWALL_OUTER_0 = new BasicTile(198, 21, 1, 0xFF48309D, true, 0x00, false);
+    public static final Tile DUNGEONWALL_OUTER_1 = new BasicTile(199, 22, 1, 0xFF48309E, true, 0x00, false);
+    public static final Tile DUNGEONWALL_OUTER_2 = new BasicTile(200, 23, 1, 0xFF48309F, true, 0x00, false);
+    public static final Tile DUNGEONWALL_OUTER_3 = new BasicTile(201, 24, 1, 0xFF4830A0, true, 0x00, false);
+    public static final Tile DUNGEONWALL_OUTER_4 = new BasicTile(202, 25, 1, 0xFF4830A1, true, 0x00, false);
+    public static final Tile DUNGEONWALL_OUTER_5 = new BasicTile(203, 21, 2, 0xFF4830A2, true, 0x00, false);
+    public static final Tile DUNGEONWALL_OUTER_6 = new BasicTile(204, 21, 3, 0xFF4830A3, true, 0x00, false);
+    public static final Tile DUNGEONWALL_OUTER_7 = new BasicTile(205, 21, 4, 0xFF4830A4, true, 0x00, false);
+    public static final Tile DUNGEONWALL_OUTER_8 = new BasicTile(206, 21, 5, 0xFF4830A5, true, 0x00, false);
+    public static final Tile DUNGEONWALL_OUTER_9 = new BasicTile(207, 22, 5, 0xFF4830A6, true, 0x00, false);
+    public static final Tile DUNGEONWALL_OUTER_A = new BasicTile(208, 23, 5, 0xFF4830A7, true, 0x00, false);
+    public static final Tile DUNGEONWALL_OUTER_B = new BasicTile(209, 24, 5, 0xFF4830A8, true, 0x00, false);
+    public static final Tile DUNGEONWALL_OUTER_C = new BasicTile(210, 25, 5, 0xFF4830A9, true, 0x00, false);
+    public static final Tile DUNGEONWALL_OUTER_D = new BasicTile(211, 25, 2, 0xFF4830AA, true, 0x00, false);
+    public static final Tile DUNGEONWALL_OUTER_E = new BasicTile(212, 25, 3, 0xFF4830AB, true, 0x00, false);
+    public static final Tile DUNGEONWALL_OUTER_F = new BasicTile(213, 25, 4, 0xFF4830AC, true, 0x00, false);
+    public static final Tile DUNGEON_WALL_0 = new BasicTile(214, 22, 2, 0xFF430AD, true, 0x00, false);
+    public static final Tile DUNGEON_WALL_1 = new BasicTile(215, 23, 2, 0xFF430AE, true, 0x00, false);
+    public static final Tile DUNGEON_WALL_2 = new BasicTile(216, 24, 2, 0xFF430AF, true, 0x00, false);
+    public static final Tile DUNGEON_FLOOR_0 = new BasicTile(217, 22, 3, 0xFF430B0, false, 0x00, false);
+    public static final Tile DUNGEON_FLOOR_1 = new BasicTile(218, 23, 3, 0xFF430B1, false, 0x00, false);
+    public static final Tile DUNGEON_FLOOR_2 = new BasicTile(219, 24, 3, 0xFF430B2, false, 0x00, false);
+    public static final Tile DUNGEON_FLOOR_3 = new BasicTile(220, 22, 4, 0xFF430B3, false, 0x00, false);
+    public static final Tile DUNGEON_FLOOR_4 = new BasicTile(221, 23, 4, 0xFF430B4, false, 0x00, false);
+    public static final Tile DUNGEON_FLOOR_5 = new BasicTile(222, 24, 4, 0xFF430B5, false, 0x00, false);
+    public static final Tile DUNGEON_HOLE = new BasicTile(223, 21, 0, 0xFF430B6, false, 0x00, false);
     
 
     protected int ID;

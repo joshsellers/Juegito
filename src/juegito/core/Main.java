@@ -40,6 +40,7 @@ import juegito.gfx.Screen;
 import juegito.gfx.SpriteSheet;
 import juegito.level.Dungeon;
 import juegito.level.DungeonGenerator;
+import juegito.level.DungeonGenerator.Room;
 import juegito.level.DungeonGeneratorLoader;
 import juegito.level.Level;
 import juegito.level.Messages;
@@ -1528,5 +1529,14 @@ public class Main extends ABFrame implements KeyListener, MouseInputListener, Ac
     public void loadDungeon(Dungeon d) {
         this.l = d;
         this.qh.l = d;
+        Room rm = d.getRooms().get(Statc.intRandom(0, d.getRooms().size()-1));
+        int x = ((rm.x) + (rm.width / 2)) << Screen.SHIFT;
+        int y = ((rm.y) + (rm.height / 2)) << Screen.SHIFT;
+        p.x = x;
+        p.y = y;
+        p.setGX(x);
+        p.setGY(y);
+        
+        d.setDebug(debug);
     }
 }

@@ -296,4 +296,8 @@ public class Level {
     public Debug getDebug() {
         return d;
     }
+    
+    public void setDebug(Debug d) {
+        this.d = d;
+    }
 }

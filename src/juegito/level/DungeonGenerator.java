@@ -191,9 +191,7 @@ public class DungeonGenerator implements Runnable {
             progress = (int) pcnt;
             System.out.println("MARKING SPAWN POINTS... " + pcnt + "%");
             r.getWarpPoints().forEach((pnts) -> {
-                //data[pnts[0] + pnts[1] * w] = Tile.PORTAL_0.getID();
-                data[pnts[2] + pnts[3] * w] = Tile.DOOR_0_1.getID();
-                data[pnts[2] + (pnts[3] - 1) * w] = Tile.DOOR_0_0.getID();
+                data[pnts[2] + pnts[3] * w] = Tile.DUNGEON_HOLE.getID();
             });
             smprgs++;
         }
@@ -215,7 +213,29 @@ public class DungeonGenerator implements Runnable {
                     float pcnt = ((float) (x + y * w) / (float) (w * h)) * 100f;
                     System.out.println("CONVERTING IMAGE... " + pcnt + "%");
                     progress = (int) pcnt;
-                    if (data[x + y * w] == Tile.VOID.getID()) data[x + y * w] = Tile.GRASS_4.getID();
+                    Room rm = null;
+                    for (Room r : rooms) {
+                        if (new Room(r.x, r.y, r.width + 1, r.height + 1).contains(new Point(x, y))) {
+                            rm = r;
+                            break;
+                        }
+                    }
+                    if (rm != null) {
+                        if (y == rm.y && x == rm.x) data[x + y * w] = Tile.DUNGEONWALL_OUTER_0.getID();
+                        else if (y == rm.y && x == rm.x + rm.width) data[x + y * w] = Tile.DUNGEONWALL_OUTER_4.getID();
+                        else if (y == rm.y + rm.height && x == rm.x) data[x + y * w] = Tile.DUNGEONWALL_OUTER_8.getID();
+                        else if (y == rm.y + rm.height && x == rm.x + rm.width) data[x + y * w] = Tile.DUNGEONWALL_OUTER_C.getID();
+                        else if (y == rm.y && x < rm.x + rm.width - 1) data[x + y * w] = Statc.intRandom(Tile.DUNGEONWALL_OUTER_1.getID(), Tile.DUNGEONWALL_OUTER_3.getID());
+                        else if (y == rm.y + rm.height - 1&& x < rm.x + rm.width - 1 && x > rm.x) data[x + y * w] = Statc.intRandom(Tile.DUNGEONWALL_OUTER_9.getID(), Tile.DUNGEONWALL_OUTER_B.getID());
+                        else if (y < rm.y + rm.height - 1 && x == rm.x) data[x + y * w] = Statc.intRandom(Tile.DUNGEONWALL_OUTER_5.getID(), Tile.DUNGEONWALL_OUTER_7.getID());
+                        else if (y < rm.y + rm.height - 1 && y > rm.y && x == rm.x + rm.width - 1) data[x + y * w] = Statc.intRandom(Tile.DUNGEONWALL_OUTER_D.getID(), Tile.DUNGEONWALL_OUTER_F.getID());
+                        else if (y > rm.y && y < rm.y + 4 && x == rm.x + 1) data[x + y * w] = Tile.DUNGEON_WALL_0.getID();
+                        else if (y > rm.y && y < rm.y + 4 && x < rm.x + rm.width) data[x + y * w] = Statc.intRandom(Tile.DUNGEON_WALL_1.getID(), Tile.DUNGEON_WALL_2.getID());
+                        else if (y > rm.y + 3 && x == rm.x + 1) data[x + y * w] = Tile.DUNGEON_FLOOR_0.getID();
+                        if (data[x + y * w] == Tile.VOID.getID() && x > rm.x && x < rm.x + rm.width && y > rm.y && y < rm.y + rm.height) {
+                            data[x + y * w] = Statc.intRandom(Tile.DUNGEON_FLOOR_1.getID(), Tile.DUNGEON_FLOOR_2.getID());
+                        }
+                    }
                 }
             }
         }
@@ -266,6 +286,8 @@ public class DungeonGenerator implements Runnable {
     }
     
     public class Room extends Rectangle {
+        
+        private int level = 0;
         
         public String hashChain = "_";
         public int connections = 0;
@@ -321,6 +343,14 @@ public class DungeonGenerator implements Runnable {
             }
             
             this.getWarpPoints().add(warpPoint);
+        }
+        
+        public int getLevel() {
+            return level;
+        }
+        
+        public void setLevel(int level) {
+            this.level = level;
         }
     }
     

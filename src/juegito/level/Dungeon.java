@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import juegito.entities.Mob;
+import juegito.entities.Stalker;
+import juegito.gfx.Screen;
 import juegito.level.tiles.Tile;
 
 /**
@@ -37,6 +40,25 @@ public class Dungeon extends Level {
     
     public List<DungeonGenerator.Room> getRooms() {
         return this.rooms;
+    }
+
+    public void spawnLoot(DungeonGenerator.Room room) {
+        if (room.getLevel() == 1) {
+            int x = Statc.intRandom(room.x + 1, room.x + room.width - 1) << Screen.SHIFT;
+            int y = Statc.intRandom(room.y + 1, room.y + room.height - 1) << Screen.SHIFT;
+            Stalker s = new Stalker(x, y, 1, true, this);
+            Player p = null;
+            for (Mob m : getMobs()) {
+                if (m.getActive() && m instanceof Player) {
+                    p = (Player) m;
+                    break;
+                }
+            }
+            s.setTartget(p);
+            s.setActive(true);
+            this.addMob(s);
+            System.out.println("Spawned stalker");
+        }
     }
     
     
