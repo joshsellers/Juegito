@@ -142,7 +142,7 @@ public class Item {
         loadIcon();
     }
     
-    public void loadIcon() {
+    public BufferedImage getIcon() {
         icon = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
         SpriteSheet sheet = new SpriteSheet(null);
         for (int ya = tileY << Screen.SHIFT; (ya - (tileY << Screen.SHIFT)) < icon.getHeight() && ya < sheet.height; ya++) {
@@ -154,6 +154,7 @@ public class Item {
                 }
             }
         }
+        return icon;
     }
     
     public void render(Screen s, Mob source, int dir) {
@@ -427,10 +428,6 @@ public class Item {
                 }
             }
         }
-    }
-    
-    public BufferedImage getIcon() {
-       return icon; 
     }
         
     public int getID() {
