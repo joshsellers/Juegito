@@ -88,8 +88,6 @@ public class Item {
     protected int tileX;
     protected int tileY;
     
-    protected BufferedImage icon;
-    
     protected boolean isCraftable;
     protected int maxusage;
     protected int damage;
